@@ -48,16 +48,19 @@ class Player extends Entity {
 
     promptForName() {
         const result = prompt("What is your name?");
-        if (!result) this.promptForName();
+        if (result == null) return false;
+        if (!result) {
+            this.promptForName();
+        }
+
         return result;
     }
 
     promptForPlay() {
-        const result = prompt(`What is your play? Your options include ${this.playArray.join(", ")}`);
+        const result = prompt(`What is your play? Your options include ${this.playArray.map(t => t.id).join(", ")}`);
         const parsedResult = this.parsePlay(result);
         if (!result || !parsedResult) this.promptForPlay();
-        this.play = parsedResult;
-        return this.play;
+        return this.play = result;
     }
 
     setPlay(newPlay) {
@@ -79,7 +82,7 @@ class Ai extends Entity {
     }
 
     getNewChoice() {
-        return this.play = this.getRandomChoice(this.playArray);
+        return this.play = this.getRandomChoice(this.playArray).id;
     }
 }
 
@@ -93,22 +96,26 @@ class Game {
         //todo multiplayer | singleplayer (dom element), singleplayer = ai created, else player2 created
         //2 ais against eachother
         const player1 = new Player("Player 1");
-        const ai1 = new Ai();
+        const player2 = new Ai();
 
-        this.players = [player1, ai1];
+        this.players = [player1, player2];
 
         //convert to do while
-        while (!gameOver) {
+        while (!this.gameOver) {
             const play1 = player1.promptForPlay();
-            const play2 = ai1.getNewChoice();
+            const play2 = player2.getNewChoice();
+
+            console.log(play1, play2);
 
             const result = this.assertWinner(play1, play2);
+            console.log(result);
 
-            if (result === "TIE") return this.declareTie();
+            if (result === "TIE") this.declareTie();
+            else {
+                const winnerPlayer = result === play1 ? this.players[0] : this.players[1];
 
-            const winnerPlayer = result === play1 ? this.players[0] : this.players[1];
-
-            this.declareWinner(winnerPlayer.name);
+                this.declareWinner(winnerPlayer);
+            }
         }
     }
 
@@ -138,9 +145,12 @@ class Game {
         } else if (play1 === "paper") {
             if (play2 === "rock") return play1; //win
             else if (play2 === "scissors") return play2//lose
-        } else {
-            return "TIE";
         }
+
+        console.log(play1);
+        console.log(play2);
+        return "TIE";
+
 
         // wtf 
         // Rock crushes Lizard
@@ -155,12 +165,14 @@ class Game {
 
     declareTie() {
         //kinda like declare winner, but no winner
+        return alert("TIE");
     }
 
     declareWinner(winner) {
-        const amt = winner.wonGame();
-        if (amt > this.limit) this.gameOver = true;
-        return alert(winner);
+        console.log(winner);
+        const amt = winner.winGame();
+        if (amt >= this.limit) this.gameOver = true;
+        return alert(winner.name);
         //put in dom
     }
 }
