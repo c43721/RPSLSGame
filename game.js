@@ -21,6 +21,7 @@ class Entity {
             },
         ];
         this.play = null;
+        this.totalWon = 0;
     }
 
     displayArray() {
@@ -31,6 +32,10 @@ class Entity {
 
     parsePlay(play) {
         return this.playArray.map(t => t.id).includes(play);
+    }
+
+    winGame() {
+        return this.totalWon++;
     }
 }
 
@@ -82,19 +87,28 @@ class Game {
     startGame(type) {
         this.type = type;
         this.limit = this.parseType(this.type);
-        this.won = false;
+        this.gameOver = false;
+        this.players = null;
 
         //todo multiplayer | singleplayer (dom element), singleplayer = ai created, else player2 created
         //2 ais against eachother
         const player1 = new Player("Player 1");
         const ai1 = new Ai();
 
-        //cconver to do while
-        while (!won) {
+        this.players = [player1, ai1];
+
+        //convert to do while
+        while (!gameOver) {
             const play1 = player1.promptForPlay();
             const play2 = ai1.getNewChoice();
 
-            this.assertWinner(play1, play2);
+            const result = this.assertWinner(play1, play2);
+
+            if (result === "TIE") return this.declareTie();
+
+            const winnerPlayer = result === play1 ? this.players[0] : this.players[1];
+
+            this.declareWinner(winnerPlayer.name);
         }
     }
 
@@ -109,22 +123,23 @@ class Game {
         }
     }
 
+
     assertWinner(play1, play2) {
         // Rock crushes Scissors
         // Scissors cuts Paper
         // Paper covers Rock
 
         if (play1 === "rock") {
-            if (play2 === "scissors") { }//win
-            else if (play2 === "paper") { }//lose
+            if (play2 === "scissors") return play1;//win
+            else if (play2 === "paper") return play2;//lose
         } else if (play1 === "scissors") {
-            if (play2 === "paper") { } //win
-            else if (play2 === "rock") { } //lose
+            if (play2 === "paper") return play1; //win
+            else if (play2 === "rock") return play2 //lose
         } else if (play1 === "paper") {
-            if (play2 === "rock") { } //win
-            else if (play2 === "scissors") { }//lose
+            if (play2 === "rock") return play1; //win
+            else if (play2 === "scissors") return play2//lose
         } else {
-            //tie
+            return "TIE";
         }
 
         // wtf 
@@ -143,8 +158,10 @@ class Game {
     }
 
     declareWinner(winner) {
+        const amt = winner.wonGame();
+        if (amt > this.limit) this.gameOver = true;
+        return alert(winner);
         //put in dom
-        //check if winner exceeds limit
     }
 }
 
