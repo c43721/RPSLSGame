@@ -1,24 +1,42 @@
 "use strict";
 
 class Entity {
-    constructor(name) {
-        this.name = name
-        this.playArray = ["rock", "papper", "scissors"];
+    constructor() {
+        this.name = null
+        this.playArray = [
+            {
+                id: "rock",
+                beats: "scissors",
+                display: "R"
+            },
+            {
+                id: "paper",
+                beats: "rock",
+                display: "P"
+            },
+            {
+                id: "scissors",
+                beats: "paper",
+                display: "S"
+            },
+        ];
         this.play = null;
     }
 
     displayArray() {
-        //TODO use  this.playArray and throw it in the DOM
+        const element = document.getElementById('selector');
+
+        element.innerHTML = `${this.playArray.map(t => `<span>${t.display}</span>`)}`
     }
 
     parsePlay(play) {
-        return this.playArray.includes(play);
+        return this.playArray.map(t => t.id).includes(play);
     }
 }
 
 class Player extends Entity {
-    constructor(name) {
-        super(name);
+    constructor() {
+        super();
 
         this.name = this.promptForName();
     }
@@ -26,8 +44,15 @@ class Player extends Entity {
     promptForName() {
         const result = prompt("What is your name?");
         if (!result) this.promptForName();
-        this.name = result;
-        return this.name;
+        return result;
+    }
+
+    promptForPlay() {
+        const result = prompt(`What is your play? Your options include ${this.playArray.join(", ")}`);
+        const parsedResult = this.parsePlay(result);
+        if (!result || !parsedResult) this.promptForPlay();
+        this.play = parsedResult;
+        return this.play;
     }
 
     setPlay(newPlay) {
@@ -38,15 +63,14 @@ class Player extends Entity {
 }
 
 class Ai extends Entity {
-    constructor(name) {
-        super(name);
+    constructor() {
+        super('Ai 1');
 
-        this.name = name;
         this.play = this.getRandomChoice(this.playArray);
     }
 
     getRandomChoice(array) {
-        return array[~~(array.length * Math.random())];
+        return array[~~(Math.random() * array.length)];
     }
 
     getNewChoice() {
@@ -61,9 +85,11 @@ class Game {
         this.won = false;
 
         //todo multiplayer | singleplayer (dom element), singleplayer = ai created, else player2 created
+        //2 ais against eachother
         const player1 = new Player("Player 1");
-        const ai1 = new Ai("Ai 1");
+        const ai1 = new Ai();
 
+        //cconver to do while
         while (!won) {
             const play1 = player1.promptForPlay();
             const play2 = ai1.getNewChoice();
@@ -88,6 +114,19 @@ class Game {
         // Scissors cuts Paper
         // Paper covers Rock
 
+        if (play1 === "rock") {
+            if (play2 === "scissors") { }//win
+            else if (play2 === "paper") { }//lose
+        } else if (play1 === "scissors") {
+            if (play2 === "paper") { } //win
+            else if (play2 === "rock") { } //lose
+        } else if (play1 === "paper") {
+            if (play2 === "rock") { } //win
+            else if (play2 === "scissors") { }//lose
+        } else {
+            //tie
+        }
+
         // wtf 
         // Rock crushes Lizard
         // Lizard poisons Spock
@@ -97,6 +136,10 @@ class Game {
         // Paper disproves Spock
         // Spock vaporizes Rock
 
+    }
+
+    declareTie() {
+        //kinda like declare winner, but no winner
     }
 
     declareWinner(winner) {
