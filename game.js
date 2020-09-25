@@ -6,17 +6,17 @@ class Entity {
         this.playArray = [
             {
                 id: "rock",
-                beats: "scissors",
+                beats: ["scissors"],
                 display: "R"
             },
             {
                 id: "paper",
-                beats: "rock",
+                beats: ["rock"],
                 display: "P"
             },
             {
                 id: "scissors",
-                beats: "paper",
+                beats: ["paper"],
                 display: "S"
             },
         ];
@@ -109,17 +109,13 @@ class Game {
         while (!this.gameOver) {
             this.round += 1;
 
-            const play1 = player1.getPlay();
-            const play2 = player2.getPlay();
+            player1.getPlay();
+            player2.getPlay();
 
-            const result = this.assertWinner(play1, play2);
+            const result = this.assertWinner(player1, player2);
 
             if (result === "TIE") this.declareTie();
-            else {
-                const winnerPlayer = result === play1 ? this.players[0] : this.players[1];
-
-                this.declareWinner(winnerPlayer);
-            }
+            else this.declareWinner(result);
         }
 
         this.endGame();
@@ -141,18 +137,28 @@ class Game {
         }
     }
 
-    assertWinner(play1, play2) {
-        if (play1 === "rock") {
-            if (play2 === "scissors") return play1;//win
-            else if (play2 === "paper") return play2;//lose
-        } else if (play1 === "scissors") {
-            if (play2 === "paper") return play1; //win
-            else if (play2 === "rock") return play2 //lose
-        } else if (play1 === "paper") {
-            if (play2 === "rock") return play1; //win
-            else if (play2 === "scissors") return play2//lose
-        }
-        return "TIE";
+    assertWinner(player1, player2) {
+        console.log(player1.name + " " + player1.totalWon);
+        console.log(player2.name + " " + player2.totalWon + "\n");
+
+        const player1PlayIndex = player1.playArray.map(p => p.id).indexOf(player1.play);
+        const player2PlayIndex = player2.playArray.map(p => p.id).indexOf(player2.play);
+
+        if (player1.playArray[player1PlayIndex].beats.includes(player2.play)) return player1;
+        else if (player2.playArray[player2PlayIndex].beats.includes(player1.play)) return player2;
+        else return "TIE";
+
+        // if (play1 === "rock") {
+        //     if (play2 === "scissors") return play1;//win
+        //     else if (play2 === "paper") return play2;//lose
+        // } else if (play1 === "scissors") {
+        //     if (play2 === "paper") return play1; //win
+        //     else if (play2 === "rock") return play2 //lose
+        // } else if (play1 === "paper") {
+        //     if (play2 === "rock") return play1; //win
+        //     else if (play2 === "scissors") return play2//lose
+        // }
+        // return "TIE";
 
 
         // wtf 
