@@ -61,7 +61,8 @@ class Entity {
     }
 
     winGame() {
-        return this.totalWon += 1;
+        this.totalWon += 1;
+        return this.totalWon;
     }
 }
 
@@ -83,9 +84,9 @@ class Player extends Entity {
     }
 
     getPlay() {
-        const result = prompt(`What is your play? Your options include ${this.playArray.map(t => t.id).join(", ")}`);
+        const result = prompt(`${this.name}, what is your play? Your options include ${this.playArray.map(t => t.id).join(", ")}`);
         const parsedResult = this.parsePlay(result);
-        if (!result || !parsedResult) this.promptForPlay();
+        if (!result || !parsedResult) this.getPlay();
         return this.play = result;
     }
 
@@ -114,18 +115,24 @@ class Ai extends Entity {
 }
 
 class Game {
-    startGame(type) {
-        Entity.displayArray();
-
+    constructor(type) {
         this.type = type;
-        this.limit = this.parseType(this.type);
+        this.limit = null;
+        this.maxWinStreak = null;
         this.round = 0;
         this.gameOver = false;
         this.players = null;
 
+        this.parseType(this.type);
+        Entity.displayArray();
+    }
+
+    startGame(type) {
         //todo multiplayer | singleplayer (dom element), singleplayer = ai created, else player2 created
         //2 ais against eachother
-        const player1 = new Player();
+        // const player1 = new Player();
+        // const player2 = new Player();
+        const player1 = new Ai('AI 1');
         const player2 = new Ai('AI 2');
 
         this.players = [player1, player2];
@@ -163,21 +170,24 @@ class Game {
     parseType(type) {
         switch (type) {
             case 'bo3':
-                return 3;
+                this.limit = 3;
+                this.maxWinStreak = 2;
+                break;
             case 'bo5':
-                return 5;
+                this.limit = 5;
+                this.maxWinStreak = 3;
+                break;
             default:
-                return 3;
+                this.limit = 3;
+                this.maxWinStreak = 2;
+                break;
         }
     }
 
-    getIndexOfPlay(player) {
-        return player.playArray.map(p => p.id).indexOf(player.play);
-    }
 
     assertWinner(player1, player2) {
-        const player1PlayIndex = this.getIndexOfPlay(player1);
-        const player2PlayIndex = this.getIndexOfPlay(player2);
+        const player1PlayIndex = player1.playArray.map(p => p.id).indexOf(player1.play);
+        const player2PlayIndex = player2.playArray.map(p => p.id).indexOf(player2.play)
 
         if (player1.playArray[player1PlayIndex].beats.includes(player2.play)) return player1;
         else if (player2.playArray[player2PlayIndex].beats.includes(player1.play)) return player2;
@@ -185,17 +195,18 @@ class Game {
     }
 
     declareTie() {
+        this.round -= 1; //"No ties"
         return alert("TIE");
     }
 
     declareWinner(winner) {
-        if (winner.totalWon >= this.limit) {
+        winner.winGame();
+        alert(`${winner.name} wins!`);
+        console.log()
+        if (this.round >= this.limit || winner.totalWon === this.maxWinStreak) {
             return this.gameOver = true;
         }
-        winner.winGame();
-        return alert(winner.name);
     }
 }
 
-const game = new Game('bo3');
-game.startGame();
+const game = new Game('bo5');
