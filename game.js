@@ -1,43 +1,47 @@
 "use strict";
 
+function getPlayArray() {
+    return [
+        {
+            id: "rock",
+            beats: ["scissors", "lizard"],
+            display: "R"
+        },
+        {
+            id: "paper",
+            beats: ["rock", "spock"],
+            display: "P"
+        },
+        {
+            id: "scissors",
+            beats: ["paper", "lizard"],
+            display: "S"
+        },
+        {
+            id: "lizard",
+            beats: ["spock", "paper"],
+            display: "L",
+        },
+        {
+            id: "spock",
+            beats: ["scissors", "rock"],
+            display: "SP",
+        }
+    ]
+}
+
 class Entity {
     constructor() {
         this.name = null
-        this.playArray = [
-            {
-                id: "rock",
-                beats: ["scissors", "lizard"],
-                display: "R"
-            },
-            {
-                id: "paper",
-                beats: ["rock", "spock"],
-                display: "P"
-            },
-            {
-                id: "scissors",
-                beats: ["paper", "lizard"],
-                display: "S"
-            },
-            {
-                id: "lizard",
-                beats: ["spock", "paper"],
-                display: "L",
-            },
-            {
-                id: "spock",
-                beats: ["scissors", "rock"],
-                display: "SP",
-            }
-        ];
+        this.playArray = getPlayArray();
         this.play = null;
         this.totalWon = 0;
     }
 
-    displayArray() {
-        const element = document.getElementById('selector');
+    static displayArray() {
+        const element = document.getElementById('option-selectors');
 
-        element.innerHTML = `${this.playArray.map(t => `<span class=\"display ${t.id}\">${t.display}</span>`)}`
+        element.innerHTML = `${getPlayArray().map(t => `<span class=\"display ${t.id}\">${t.display}</span>`).join("")}`
     }
 
     parsePlay(play) {
@@ -148,9 +152,6 @@ class Game {
     }
 
     assertWinner(player1, player2) {
-        console.log(player1.name + " " + player1.totalWon);
-        console.log(player2.name + " " + player2.totalWon + "\n");
-
         const player1PlayIndex = player1.playArray.map(p => p.id).indexOf(player1.play);
         const player2PlayIndex = player2.playArray.map(p => p.id).indexOf(player2.play);
 
@@ -173,4 +174,5 @@ class Game {
 }
 
 const game = new Game('bo3');
-game.startGame();
+// game.startGame();
+Entity.displayArray();

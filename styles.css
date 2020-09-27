@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Oxygen&display=swap');
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Oxygen', sans-serif;
+    margin: 0;
+    background-color: hsl(200, 30%, 60%);
+}
+
+.option-selectors {
+    display: flex;
+    justify-content: center;
+    color: white;
+    padding: 10px 0px;
+}
+
+.display {
+    margin: 0 15px;
+    font-size: 2.5rem;
+    cursor: pointer;
+    transition: 200ms;
+}
+
+.display:hover {
+    transform: scale(1.4);
+}
