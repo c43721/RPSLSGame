@@ -1,5 +1,13 @@
 "use strict";
 
+function getSelectionElements() {
+    const array = getPlayArray();
+
+    return array.map(play => {
+        return document.getElementById(play.id)
+    })
+}
+
 function getPlayArray() {
     return [
         {
@@ -41,7 +49,7 @@ class Entity {
     static displayArray() {
         const element = document.getElementById('option-selectors');
 
-        element.innerHTML = `${getPlayArray().map(t => `<span class=\"display ${t.id}\">${t.display}</span>`).join("")}`
+        element.innerHTML = `${getPlayArray().map(t => `<span class=\"display\" id=\"${t.id}\">${t.display}</span>`).join("")}`
     }
 
     parsePlay(play) {
@@ -107,6 +115,8 @@ class Ai extends Entity {
 
 class Game {
     startGame(type) {
+        Entity.displayArray();
+
         this.type = type;
         this.limit = this.parseType(this.type);
         this.round = 0;
@@ -115,7 +125,7 @@ class Game {
 
         //todo multiplayer | singleplayer (dom element), singleplayer = ai created, else player2 created
         //2 ais against eachother
-        const player1 = new Ai('AI 1');
+        const player1 = new Player();
         const player2 = new Ai('AI 2');
 
         this.players = [player1, player2];
@@ -126,6 +136,8 @@ class Game {
             player1.getPlay();
             player2.getPlay();
 
+            // this.displayPlay(player1, player2);
+
             const result = this.assertWinner(player1, player2);
 
             if (result === "TIE") this.declareTie();
@@ -134,6 +146,14 @@ class Game {
 
         this.endGame();
     }
+
+    // displayPlay(player1, player2) {
+    //     const player1PlayIndex = this.getIndexOfPlay(player1);
+    //     const player2PlayIndex = this.getIndexOfPlay(player2);
+
+    //     const output = document.getElementById("output");
+    //     output.innerHTML = `<span class="left">${player1.playArray[player1PlayIndex].display}</span><span class="right">${player2.playArray[player2PlayIndex].display}</span>`;
+    // }
 
     endGame() {
         const [player1, player2] = this.players;
@@ -151,9 +171,13 @@ class Game {
         }
     }
 
+    getIndexOfPlay(player) {
+        return player.playArray.map(p => p.id).indexOf(player.play);
+    }
+
     assertWinner(player1, player2) {
-        const player1PlayIndex = player1.playArray.map(p => p.id).indexOf(player1.play);
-        const player2PlayIndex = player2.playArray.map(p => p.id).indexOf(player2.play);
+        const player1PlayIndex = this.getIndexOfPlay(player1);
+        const player2PlayIndex = this.getIndexOfPlay(player2);
 
         if (player1.playArray[player1PlayIndex].beats.includes(player2.play)) return player1;
         else if (player2.playArray[player2PlayIndex].beats.includes(player1.play)) return player2;
@@ -174,5 +198,4 @@ class Game {
 }
 
 const game = new Game('bo3');
-// game.startGame();
-Entity.displayArray();
+game.startGame();

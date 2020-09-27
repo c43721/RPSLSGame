@@ -26,3 +26,12 @@ body {
 .display:hover {
     transform: scale(1.4);
 }
+
+.header {
+    margin: 15px 0px;
+    display: flex;
+    justify-content: center;
+    font-size: 3rem;
+    font-weight: bold;
+    color: white;
+}
