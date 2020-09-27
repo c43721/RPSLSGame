@@ -6,19 +6,29 @@ class Entity {
         this.playArray = [
             {
                 id: "rock",
-                beats: ["scissors"],
+                beats: ["scissors", "lizard"],
                 display: "R"
             },
             {
                 id: "paper",
-                beats: ["rock"],
+                beats: ["rock", "spock"],
                 display: "P"
             },
             {
                 id: "scissors",
-                beats: ["paper"],
+                beats: ["paper", "lizard"],
                 display: "S"
             },
+            {
+                id: "lizard",
+                beats: ["spock", "paper"],
+                display: "L",
+            },
+            {
+                id: "spock",
+                beats: ["scissors", "rock"],
+                display: "SP",
+            }
         ];
         this.play = null;
         this.totalWon = 0;
@@ -27,7 +37,7 @@ class Entity {
     displayArray() {
         const element = document.getElementById('selector');
 
-        element.innerHTML = `${this.playArray.map(t => `<span>${t.display}</span>`)}`
+        element.innerHTML = `${this.playArray.map(t => `<span class=\"display ${t.id}\">${t.display}</span>`)}`
     }
 
     parsePlay(play) {
@@ -147,29 +157,6 @@ class Game {
         if (player1.playArray[player1PlayIndex].beats.includes(player2.play)) return player1;
         else if (player2.playArray[player2PlayIndex].beats.includes(player1.play)) return player2;
         else return "TIE";
-
-        // if (play1 === "rock") {
-        //     if (play2 === "scissors") return play1;//win
-        //     else if (play2 === "paper") return play2;//lose
-        // } else if (play1 === "scissors") {
-        //     if (play2 === "paper") return play1; //win
-        //     else if (play2 === "rock") return play2 //lose
-        // } else if (play1 === "paper") {
-        //     if (play2 === "rock") return play1; //win
-        //     else if (play2 === "scissors") return play2//lose
-        // }
-        // return "TIE";
-
-
-        // wtf 
-        // Rock crushes Lizard
-        // Lizard poisons Spock
-        // Spock smashes Scissors
-        // Scissors decapitates Lizard
-        // Lizard eats Paper
-        // Paper disproves Spock
-        // Spock vaporizes Rock
-
     }
 
     declareTie() {
