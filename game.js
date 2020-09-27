@@ -5,27 +5,27 @@ function getPlayArray() {
         {
             id: "rock",
             beats: ["scissors", "lizard"],
-            display: "R"
+            display: "✊"
         },
         {
             id: "paper",
             beats: ["rock", "spock"],
-            display: "P"
+            display: "🤚"
         },
         {
             id: "scissors",
             beats: ["paper", "lizard"],
-            display: "S"
+            display: "✌️"
         },
         {
             id: "lizard",
             beats: ["spock", "paper"],
-            display: "L",
+            display: "🤏",
         },
         {
             id: "spock",
             beats: ["scissors", "rock"],
-            display: "SP",
+            display: "🖖",
         }
     ]
 }
