@@ -203,6 +203,7 @@ class Game {
         this.maxWinStreak = null;
         this.round = 0;
         this.gameOver = false;
+        this.parseType(this.type);
     }
 
     endGame() {
