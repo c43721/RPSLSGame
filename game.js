@@ -158,7 +158,6 @@ class Game {
     }
 
     startGame() {
-        this.endGame = false;
         this.players = [];
         const type = this.humans;
 
@@ -199,11 +198,23 @@ class Game {
         this.endGame();
     }
 
+    resetGame() {
+        this.type = type;
+        this.limit = null;
+        this.maxWinStreak = null;
+        this.round = 0;
+        this.gameOver = false;
+        this.players = null;
+        this.humans = 1;
+    }
+
     endGame() {
-        const winnerArray = this.players.sort((a, b) => a.totalWon < b.totalWon); //I love the sort function
-        console.table(winnerArray);
+        const winnerArray = this.players.sort((a, b) => a.totalWon - b.totalWon); //I love the sort function
         const [winner, loser] = winnerArray;
-        return alert(`${winner.name} wins: ${winner.totalWon}\n${loser.name}: ${loser.totalWon}`);
+        alert(`${winner.name} wins: ${winner.totalWon}\n${loser.name}: ${loser.totalWon}`);
+
+        //Set all things back to default.
+        this.resetGame();
     }
 
     parseType(type) {
