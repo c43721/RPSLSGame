@@ -114,8 +114,9 @@ class Ai extends Entity {
 }
 
 class Game {
-    constructor(type) { //So game can take a type, but I don't know how to create the listeners for changing this.humans, since static functions cannot access the `this` context
-        this.type = type;
+    constructor() { //So game can take a type, but I don't know how to create the listeners for changing this.humans, since static functions cannot access the `this` context
+        const response = this.promptForGameType();
+        this.type = response;
         this.limit = null;
         this.maxWinStreak = null;
         this.round = 0;
@@ -128,12 +129,19 @@ class Game {
         this.setUpGameHandlers();
     }
 
+    promptForGameType() {
+        const responseOfType = prompt(`Do you want these games to be a Best of 5 or Best of 3? Type "bo3" for BO3, "bo5" for BO5`);
+        if (!["bo3", "bo5"].includes(responseOfType)) this.promptForGameType();
+        return responseOfType;
+    }
+
     setUpGameHandlers() {
         const singleplayer = document.getElementById("singleplayer");
         const multiplayer = document.getElementById("multiplayer");
         const aivai = document.getElementById("gltich");
 
         [singleplayer, multiplayer, aivai].forEach(radio => {
+            if (radio == null) return;
             radio.addEventListener("change", () => {
                 switch (radio.id) {
                     case "singleplayer":
@@ -256,4 +264,4 @@ class Game {
     }
 }
 
-const game = new Game('bo3');
+const game = new Game();
