@@ -207,9 +207,8 @@ class Game {
     }
 
     endGame() {
-        const winnerArray = this.players.sort((a, b) => a.totalWon - b.totalWon); //I love the sort function
+        const winnerArray = this.players.sort((a, b) => a.totalWon - b.totalWon).reverse(); //I love the sort function, but I was getting [loser, winner
         const [winner, loser] = winnerArray;
-        console.log(winner.totalWon, loser.totalWon);
         alert(`${winner.name} wins: ${winner.totalWon}\n${loser.name}: ${loser.totalWon}`);
 
         //Set all things back to default.
