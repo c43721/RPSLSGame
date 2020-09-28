@@ -199,7 +199,6 @@ class Game {
     }
 
     resetGame() {
-        this.type = type;
         this.limit = null;
         this.maxWinStreak = null;
         this.round = 0;
@@ -211,6 +210,7 @@ class Game {
     endGame() {
         const winnerArray = this.players.sort((a, b) => a.totalWon - b.totalWon); //I love the sort function
         const [winner, loser] = winnerArray;
+        console.log(winner.totalWon, loser.totalWon);
         alert(`${winner.name} wins: ${winner.totalWon}\n${loser.name}: ${loser.totalWon}`);
 
         //Set all things back to default.
