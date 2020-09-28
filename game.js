@@ -203,8 +203,6 @@ class Game {
         this.maxWinStreak = null;
         this.round = 0;
         this.gameOver = false;
-        this.players = null;
-        this.humans = 1;
     }
 
     endGame() {
