@@ -1,6 +1,6 @@
 "use strict";
 
-function getSelectionElements() {
+function getSelectionElements() { //Ah yes, it could have been in Entity.getSelectionElements as a static function, but then that would ruin the Entity classes' sole purpose as an Entity class
     const array = getPlayArray();
 
     return array.map(play => {
@@ -8,7 +8,7 @@ function getSelectionElements() {
     })
 }
 
-function getPlayArray() {
+function getPlayArray() { //Function rather than class because stated above
     return [
         {
             id: "rock",
@@ -46,7 +46,7 @@ class Entity {
         this.totalWon = 0;
     }
 
-    static displayArray() {
+    static displayArray() { //Static is fun. This was going to be a way for a user to click on emojis, but that was cut out of the final draft due to javascript knowledge barriers.
         const element = document.getElementById('option-selectors');
 
         element.innerHTML = `${getPlayArray().map(t => `<span class=\"display\" id=\"${t.id}\">${t.display}</span>`).join("")}`
@@ -75,7 +75,6 @@ class Player extends Entity {
 
     promptForName() {
         const result = prompt("What is your name?");
-        if (result == null) return false;
         if (!result) {
             this.promptForName();
         }
@@ -84,7 +83,7 @@ class Player extends Entity {
     }
 
     getPlay() {
-        const result = prompt(`${this.name}, what is your play? Your options include ${this.playArray.map(t => t.id).join(", ")}`);
+        const result = prompt(`${this.name}, what is your play?\nYour options include ${this.playArray.map(t => t.id).join(", ")}`);
         const parsedResult = this.parsePlay(result);
         if (!result || !parsedResult) this.getPlay();
         return this.play = result;
@@ -115,7 +114,7 @@ class Ai extends Entity {
 }
 
 class Game {
-    constructor(type) {
+    constructor(type) { //So game can take a type, but I don't know how to create the listeners for changing this.humans, since static functions cannot access the `this` context
         this.type = type;
         this.limit = null;
         this.maxWinStreak = null;
@@ -207,7 +206,7 @@ class Game {
     }
 
     endGame() {
-        const winnerArray = this.players.sort((a, b) => a.totalWon - b.totalWon).reverse(); //I love the sort function, but I was getting [loser, winner
+        const winnerArray = this.players.sort((a, b) => a.totalWon - b.totalWon).reverse(); //I love the sort function, but I was getting [loser, winner]...
         const [winner, loser] = winnerArray;
         alert(`${winner.name} wins: ${winner.totalWon}\n${loser.name}: ${loser.totalWon}`);
 
