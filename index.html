@@ -15,12 +15,24 @@
     </div>
     <div class="option-selectors" id="option-selectors"></div>
 
-    <button onclick="game.startGame()">Click me to start!</button>
-
-    <div class="output" id="output">
-        <!-- output -->
+    <div class="selectors">
+        <div>
+            <label for="singleplayer">Singleplayer</label>
+            <input type="radio" id="singleplayer" name="selector" value="0">
+        </div>
+        <div>
+            <label for="multiplayer">Multiplayer</label>
+            <input type="radio" id="multiplayer" name="selector" value="1">
+        </div>
+        <div>
+            <!-- tests AI v AI -->
+            <label for="gl-tch">g̷̪̲̪̾̋͛̄̾̄̅̓͆̀̚̚͠͠l̵͓̠͈̹͖̜͕̠͍̟̣͍͖̒̊̇̔́̎́͠í̵̡̧̡͙̪̗͔͕͈̼͎̪̲̂͑̓́̓͛̑̆̆̇͝t̵̖̥̻̲͖̳̗̳̬̫̺̦͋͆̇͌̅͗̃̿͌̋̑͝c̸̪͇̜̽̅͒̔͂̓̆̉̇̈́̃̃ḩ̵̹̱̠͇͖͎͕͓̣̤̤̑̽̉̅̀̇̿̿͂ ̷̱̖̮̘̳̠̩̻̹͚̍͊́̀̀͑̀̇̓̏̀̕̚ą̸̖̙͈͎͉̟̟͔̘̘̹͚̒͌̒̒̈͑͝͠͝͝ͅȋ̴̢̧̖͚͖͍̙̥̜͕̙̯̥͒̓ͅ ̴̨̗̪̠͔͛͆͑̄͊͑͆̈́̉̔͂̀̇͘͘ͅv̴̢͕̤̻͙̩̣̥̮͕̭͔̒̌̉̀̾̅͋͠ͅ ̴̢̘̬̊̓̌̓̐͆̓̓͒̕̕͘͝͠á̵̡̡̧̙̻̠̥͎͙̼̟͍͓͚͚̣͋͌̅̉̓̑͊͌́͝i̵̢̺̦̻̙͖̱͍͚̇̅͆̀̂̓̍͐͊͂̍́̑́ͅͅ</label>
+            <input type="radio" id="gltich" name="selector" value="infinity">
+        </div>
     </div>
-
+    <div class="center">
+        <button onclick="game.startGame()" class="btn btn-start">Click me to start!</button>
+    </div>
 </body>
 
 </html>

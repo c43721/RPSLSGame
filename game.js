@@ -122,20 +122,67 @@ class Game {
         this.round = 0;
         this.gameOver = false;
         this.players = null;
+        this.humans = 1;
 
         this.parseType(this.type);
         Entity.displayArray();
+        this.setUpGameHandlers();
     }
 
-    startGame(type) {
-        //todo multiplayer | singleplayer (dom element), singleplayer = ai created, else player2 created
-        //2 ais against eachother
-        // const player1 = new Player();
-        // const player2 = new Player();
-        const player1 = new Ai('AI 1');
-        const player2 = new Ai('AI 2');
+    setUpGameHandlers() {
+        const singleplayer = document.getElementById("singleplayer");
+        const multiplayer = document.getElementById("multiplayer");
+        const aivai = document.getElementById("gltich");
 
-        this.players = [player1, player2];
+        [singleplayer, multiplayer, aivai].forEach(radio => {
+            radio.addEventListener("change", () => {
+                switch (radio.id) {
+                    case "singleplayer":
+                        this.humans = 1;
+                        break;
+                    case "multiplayer":
+                        this.humans = 2;
+                        break;
+                    case "gltich":
+                        this.humans = 0;
+                        break;
+                    default:
+                        this.humans = 1;
+                        break;
+
+                }
+            })
+        })
+
+        return this.humans;
+    }
+
+    startGame() {
+        this.endGame = false;
+        this.players = [];
+        const type = this.humans;
+
+        let player1, player2;
+        switch (type) {
+            case 1:
+                player1 = new Player();
+                player2 = new Ai("Ai 1");
+                break;
+            case 2:
+                player1 = new Player();
+                player2 = new Player();
+                break;
+            case 0:
+                player1 = new Ai("Ai 1");
+                player2 = new Ai("Ai 2");
+                break;
+            default:
+                player1 = new Player();
+                player2 = new Ai("Ai 1");
+                break;
+        }
+
+        this.players.push(player1, player2);
 
         while (!this.gameOver) {
             this.round += 1;
@@ -143,9 +190,7 @@ class Game {
             player1.getPlay();
             player2.getPlay();
 
-            // this.displayPlay(player1, player2);
-
-            const result = this.assertWinner(player1, player2);
+            const result = this.assertWinner(this.players[0], this.players[1]);
 
             if (result === "TIE") this.declareTie();
             else this.declareWinner(result);
@@ -154,17 +199,11 @@ class Game {
         this.endGame();
     }
 
-    // displayPlay(player1, player2) {
-    //     const player1PlayIndex = this.getIndexOfPlay(player1);
-    //     const player2PlayIndex = this.getIndexOfPlay(player2);
-
-    //     const output = document.getElementById("output");
-    //     output.innerHTML = `<span class="left">${player1.playArray[player1PlayIndex].display}</span><span class="right">${player2.playArray[player2PlayIndex].display}</span>`;
-    // }
-
     endGame() {
-        const [player1, player2] = this.players;
-        return alert(`${player1.name} wins: ${player1.totalWon}\n${player2.name}: ${player2.totalWon}`);
+        const winnerArray = this.players.sort((a, b) => a.totalWon < b.totalWon); //I love the sort function
+        console.table(winnerArray);
+        const [winner, loser] = winnerArray;
+        return alert(`${winner.name} wins: ${winner.totalWon}\n${loser.name}: ${loser.totalWon}`);
     }
 
     parseType(type) {
@@ -209,4 +248,4 @@ class Game {
     }
 }
 
-const game = new Game('bo5');
+const game = new Game('bo3');
